@@ -1,287 +1,1149 @@
 <!DOCTYPE html>
-<!-- LOGO / NAV -->
-<div class="nav">
-  <div class="logo">
-    <div class="logo-icon"></div>
-    <span class="logo-text">CivicPath</span>
-  </div>
-</div>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LocalMotion — From Idea to Execution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 
 <style>
-.nav {
+:root {
+  --bg: #080b10;
+  --bg2: #0d1117;
+  --surface: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --text: #e8eaf0;
+  --muted: #7a8394;
+  --accent1: #9945FF;
+  --accent2: #14F195;
+  --accent3: #00C2FF;
+  --grad: linear-gradient(135deg, #9945FF, #14F195);
+  --grad2: linear-gradient(90deg, #9945FF 0%, #00C2FF 50%, #14F195 100%);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ── GLOW ORBS ── */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.orb-1 { width: 600px; height: 600px; background: rgba(153,69,255,0.15); top: -200px; left: -100px; }
+.orb-2 { width: 500px; height: 500px; background: rgba(20,241,149,0.08); top: 100px; right: -150px; }
+.orb-3 { width: 400px; height: 400px; background: rgba(0,194,255,0.07); top: 600px; left: 40%; }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(8,11,16,0.8);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  max-width: 1160px;
+  margin: auto;
+  padding: 0 24px;
+  height: 64px;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  padding: 20px 0;
+  justify-content: space-between;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
 }
 
-.logo-icon {
-  width: 12px;
-  height: 12px;
+.logo-mark {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: linear-gradient(90deg, #00ffa3, #dc1fff);
-  box-shadow: 0 0 10px rgba(0,255,163,0.6);
+  background: var(--grad);
+  box-shadow: 0 0 20px rgba(153,69,255,0.5);
+  flex-shrink: 0;
 }
 
 .logo-text {
-  font-size: 20px;
-  font-weight: 600;
-  background: linear-gradient(90deg, #00ffa3, #dc1fff);
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  background: var(--grad2);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+  letter-spacing: 0.2px;
+}
+
+.nav-links a:hover { color: var(--text); }
+
+.nav-cta {
+  padding: 9px 20px;
+  border-radius: 8px;
+  background: var(--grad);
+  color: #000 !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 24px 80px;
+  overflow: hidden;
+}
+
+.hero-inner {
+  max-width: 1160px;
+  margin: auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(153,69,255,0.3);
+  background: rgba(153,69,255,0.08);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent2);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent2);
+  box-shadow: 0 0 8px var(--accent2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 28px;
+  max-width: 900px;
+}
+
+.grad-text {
+  background: var(--grad2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2vw, 19px);
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 44px;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.btn-primary {
+  padding: 14px 28px;
+  border-radius: 10px;
+  background: var(--grad);
+  color: #000;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 30px rgba(153,69,255,0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(153,69,255,0.45);
+}
+
+.btn-ghost {
+  padding: 14px 28px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  background: var(--surface);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.btn-ghost:hover {
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.07);
+}
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 900px;
+}
+
+.stat-item {
+  background: var(--bg2);
+  padding: 28px 24px;
+  position: relative;
+}
+
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  background: var(--grad2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── SECTION COMMON ── */
+.section {
+  position: relative;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 100px 24px;
+}
+
+.section-tag {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent1);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-tag::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  background: var(--accent1);
+  border-radius: 2px;
+}
+
+h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.08;
+  margin-bottom: 20px;
+}
+
+.section-desc {
+  color: var(--muted);
+  max-width: 540px;
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 56px;
+}
+
+/* ── PROCESS GRID ── */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.process-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.process-card:hover {
+  border-color: rgba(153,69,255,0.3);
+  transform: translateY(-4px);
+}
+
+.process-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--grad);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  border-radius: 16px;
+}
+
+.process-card:hover::after { opacity: 0.03; }
+
+.card-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent1);
+  margin-bottom: 18px;
+  opacity: 0.7;
+}
+
+.card-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.process-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+
+.process-card p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+/* ── DIVIDER ── */
+.full-divider {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 0;
+}
+
+/* ── DELIVERABLES ── */
+.deliverables-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.deliverable-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.deliverable-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+  transition: padding-left 0.2s;
+  cursor: default;
+}
+
+.deliverable-item:hover { padding-left: 6px; }
+
+.d-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(153,69,255,0.1);
+  border: 1px solid rgba(153,69,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.d-content h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.d-content p {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+.side-panel {
+  position: sticky;
+  top: 100px;
+}
+
+.timeline-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--grad2);
+}
+
+.timeline-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+
+.timeline-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.t-step {
+  display: flex;
+  gap: 16px;
+  padding: 14px 0;
+  position: relative;
+}
+
+.t-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 38px;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.t-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent2);
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-family: 'Syne', sans-serif;
+}
+
+.t-day {
+  font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0.5px;
-}
-</style>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Map My Idea</title>
-
-<style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
-
-body {
-  background: radial-gradient(circle at top, #1a1a2e, #0a0a0f);
-  color:#fff;
+  color: var(--accent2);
+  text-transform: uppercase;
+  margin-bottom: 2px;
 }
 
-.container { max-width:1100px; margin:auto; padding:40px 20px; }
-
-h1 { font-size:52px; margin-bottom:20px; }
-h2 { font-size:30px; margin-bottom:20px; }
-p { color:#cfcfcf; margin-bottom:15px; }
-
-.hero { text-align:center; padding:100px 20px 60px; }
-
-.gradient {
-  background: linear-gradient(90deg,#00ffa3,#dc1fff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+.t-desc {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 300;
 }
 
-.cta {
-  display:inline-block;
-  margin-top:25px;
-  padding:14px 30px;
-  border-radius:10px;
-  background:linear-gradient(90deg,#00ffa3,#dc1fff);
-  color:#000;
-  font-weight:600;
-  text-decoration:none;
+/* ── CASE STUDIES ── */
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
-.section { margin-top:80px; }
-
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
+.case-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 30px;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.3s, transform 0.3s;
+  cursor: default;
 }
 
-.card {
-  background:rgba(255,255,255,0.05);
-  padding:22px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,0.08);
+.case-card:hover {
+  border-color: rgba(20,241,149,0.2);
+  transform: translateY(-4px);
 }
 
-.card h3 { margin-bottom:10px; }
+.case-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 16px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(20,241,149,0.08);
+  border: 1px solid rgba(20,241,149,0.15);
+  display: inline-block;
+}
+
+.case-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+  line-height: 1.25;
+}
+
+.case-card p {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+
+.case-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.case-result::before {
+  content: '→';
+  color: var(--accent2);
+  font-weight: 700;
+}
+
+/* ── TRUST STRIP ── */
+.trust-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.trust-inner {
+  max-width: 1160px;
+  margin: auto;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.trust-inner p {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+
+.trust-items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: -0.2px;
+  transition: color 0.2s;
+}
+
+.trust-item:hover { color: rgba(255,255,255,0.55); }
+
+/* ── FORM SECTION ── */
+.form-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.form-section::before {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: rgba(153,69,255,0.07);
+  filter: blur(100px);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+
+.form-layout {
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: 80px;
+  align-items: start;
+  position: relative;
+  z-index: 1;
+}
+
+.form-intro h2 { margin-bottom: 16px; }
+
+.form-intro p {
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.7;
+  margin-bottom: 0;
+}
+
+.spots-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(20,241,149,0.06);
+  border: 1px solid rgba(20,241,149,0.15);
+  font-size: 13px;
+  color: var(--accent2);
+  font-weight: 500;
+  margin-top: 32px;
+}
+
+.spots-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent2);
+  box-shadow: 0 0 8px var(--accent2);
+  animation: pulse 2s ease-in-out infinite;
+}
 
 .form-box {
-  margin-top:40px;
-  background:rgba(255,255,255,0.05);
-  padding:30px;
-  border-radius:14px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px;
+  position: relative;
+}
+
+.form-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--grad2);
+  border-radius: 20px 20px 0 0;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 8px;
+  letter-spacing: 0.2px;
 }
 
 input, textarea, select {
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  margin-bottom:18px;
-  border-radius:8px;
-  border:none;
-  background:#111;
-  color:#fff;
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  resize: vertical;
+  -webkit-appearance: none;
 }
 
-button {
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:8px;
-  background:linear-gradient(90deg,#00ffa3,#dc1fff);
-  color:#000;
-  font-weight:bold;
-  cursor:pointer;
+textarea { min-height: 80px; }
+
+input:focus, textarea:focus, select:focus {
+  border-color: rgba(153,69,255,0.4);
+  background: rgba(153,69,255,0.04);
 }
 
-.small { font-size:14px; color:#888; }
+select option {
+  background: #0d1117;
+  color: var(--text);
+}
 
+.submit-btn {
+  width: 100%;
+  padding: 15px 24px;
+  border: none;
+  border-radius: 10px;
+  background: var(--grad);
+  color: #000;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 4px 30px rgba(153,69,255,0.3);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(153,69,255,0.45);
+  opacity: 0.95;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 24px;
+  text-align: center;
+}
+
+footer p {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+.footer-brand {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  background: var(--grad2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-inner > * {
+  animation: fadeUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+.hero-inner > *:nth-child(1) { animation-delay: 0.1s; }
+.hero-inner > *:nth-child(2) { animation-delay: 0.25s; }
+.hero-inner > *:nth-child(3) { animation-delay: 0.4s; }
+.hero-inner > *:nth-child(4) { animation-delay: 0.55s; }
+.hero-inner > *:nth-child(5) { animation-delay: 0.7s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .stats-strip { grid-template-columns: repeat(2,1fr); }
+  .deliverables-layout { grid-template-columns: 1fr; }
+  .side-panel { position: static; }
+  .cases-grid { grid-template-columns: 1fr; }
+  .form-layout { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  h1 { letter-spacing: -1px; }
+}
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<!-- ORB GLOWS -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark"></div>
+      <span class="logo-text">LocalMotion</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#deliverables">What You Get</a></li>
+      <li><a href="#examples">Case Studies</a></li>
+      <li><a href="#form" class="nav-cta">Get Started</a></li>
+    </ul>
+  </div>
+</nav>
 
 <!-- HERO -->
+<div style="position:relative; overflow:hidden;">
 <div class="hero">
-  <h1>
-    From idea → <span class="gradient">real-world execution</span><br>in 7 days
-  </h1>
-
-  <p>
-    I turn your idea into a clear plan and connect you locally so you can take action immediately.
-    Skip the in unnecessary setup or overthinking.
-  </p>
-
-  <a href="#form" class="cta">Map My Idea</a>
-  <p class="small">No fluff. Just a clear path forward.</p>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">From idea to execution in 7 days</div>
+    <h1>Turn your idea into<br><span class="grad-text">real-world results.</span></h1>
+    <p class="hero-sub">
+      LocalMotion transforms your vision into a concrete execution plan — complete with
+      local connections, clear next steps, and a strategy to achieve your first win
+      within a week.
+    </p>
+    <div class="hero-actions">
+      <a href="#form" class="btn-primary">Map My Idea →</a>
+      <a href="#how" class="btn-ghost">See How It Works</a>
+    </div>
+    <div class="stats-strip">
+      <div class="stat-item">
+        <div class="stat-num">7</div>
+        <div class="stat-label">Days to first result</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Locally connected</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Deliverables included</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">Zero</div>
+        <div class="stat-label">Unnecessary setup</div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
-<!-- PROMISE -->
-<div class="section">
-  <h2>This isn’t advice. It’s a plan you can execute immediately.</h2>
-  <p>
-    Most people don’t need more information. They need clarity, direction, and the right connections.
-  </p>
-  <p>
-    I take what you’re trying to build and turn it into a simple, actionable plan with real steps
-    and local opportunities. So you can actually start.
-  </p>
-</div>
-
-<!-- WHAT I DO -->
-<div class="section">
-  <h2>What I Do</h2>
-  <div class="grid">
-    <div class="card">
-      <h3>Turn Ideas Into Action</h3>
-      <p>Clear steps on exactly what to do next—no fluff.</p>
-    </div>
-    <div class="card">
-      <h3>Cut Through Friction</h3>
-      <p>Skip unnecessary steps and focus only on what actually moves you forward.</p>
-    </div>
-    <div class="card">
-      <h3>Connect You Locally</h3>
-      <p>Relevant people, partners, and opportunities near you.</p>
-    </div>
-    <div class="card">
-      <h3>Get You a First Win</h3>
-      <p>Customer, donor, event, or traction. Real connections within a week.</p>
+<!-- TRUST STRIP -->
+<div class="trust-section">
+  <div class="trust-inner">
+    <p>Built for founders, changemakers & community leaders</p>
+    <div class="trust-items">
+      <span class="trust-item">Community Builders</span>
+      <span class="trust-item">Social Entrepreneurs</span>
+      <span class="trust-item">Nonprofit Founders</span>
+      <span class="trust-item">Local Organizers</span>
+      <span class="trust-item">Mission-Driven Teams</span>
     </div>
   </div>
 </div>
 
-<!-- WHY -->
+<!-- HOW IT WORKS -->
+<div id="how">
 <div class="section">
-  <h2>Most people get stuck before they even begin.</h2>
-  <p>
-    They think they need to set everything up first.<br>
-    They spend weeks researching instead of doing.<br>
-    They don’t know who to talk to.
+  <div class="section-tag">The Approach</div>
+  <h2>Clarity. Direction.<br>Local connections.</h2>
+  <p class="section-desc">
+    Most people don't lack ideas — they lack a structured path forward. LocalMotion bridges
+    the gap between vision and execution through four core disciplines.
   </p>
-  <p>
-    You don’t need most of that to start.
-  </p>
-</div>
 
-<!-- WHAT YOU GET -->
-<div class="section">
-  <h2>Your 7-Day Plan Includes</h2>
-  <div class="grid">
-    <div class="card">
-      <h3>Execution Plan</h3>
-      <p>A clear, step-by-step plan tailored to your idea.</p>
+  <div class="process-grid">
+    <div class="process-card">
+      <div class="card-num">01 — INTAKE</div>
+      <div class="card-icon">🎯</div>
+      <h3>Idea Clarity</h3>
+      <p>We extract the core of what you're trying to build and define precisely what
+      success looks like — removing ambiguity from the equation entirely.</p>
     </div>
-    <div class="card">
-      <h3>Connection Map</h3>
-      <p>Where to go, who to talk to, and how to plug in.</p>
+    <div class="process-card">
+      <div class="card-num">02 — STRATEGY</div>
+      <div class="card-icon">⚡</div>
+      <h3>Friction Removal</h3>
+      <p>We identify and eliminate the unnecessary steps consuming your time and energy,
+      keeping you laser-focused on the actions that actually drive momentum.</p>
     </div>
-    <div class="card">
-      <h3>7-Day Action Plan</h3>
-      <p>What to do day-by-day to move forward immediately.</p>
+    <div class="process-card">
+      <div class="card-num">03 — NETWORK</div>
+      <div class="card-icon">🔗</div>
+      <h3>Local Connections</h3>
+      <p>We map the relevant people, partners, venues, and organizations in your area
+      who can accelerate your progress from day one.</p>
     </div>
-    <div class="card">
-      <h3>First Result Strategy</h3>
-      <p>How to get your first real traction fast.</p>
+    <div class="process-card">
+      <div class="card-num">04 — TRACTION</div>
+      <div class="card-icon">🚀</div>
+      <h3>First Win Strategy</h3>
+      <p>We define and pursue your first real milestone — a customer, partner, event, or
+      community anchor — to generate early proof and build momentum.</p>
     </div>
   </div>
 </div>
+</div>
 
-<!-- EXAMPLES -->
+<hr class="full-divider">
+
+<!-- DELIVERABLES -->
+<div id="deliverables">
 <div class="section">
-  <h2>What this looks like</h2>
-  <div class="grid">
+  <div class="section-tag">Your 7-Day Plan</div>
+  <h2>Everything you need<br>to <span class="grad-text">move immediately.</span></h2>
 
-    <div class="card">
-      <h3>Community Events</h3>
-      <p>Partnered with a venue and hosted an event within a week.</p>
+  <div class="deliverables-layout">
+    <div class="deliverable-list">
+      <div class="deliverable-item">
+        <div class="d-icon">📋</div>
+        <div class="d-content">
+          <h3>Execution Plan</h3>
+          <p>A structured, step-by-step roadmap tailored specifically to your idea, your
+          resources, and your timeline — no generic templates.</p>
+        </div>
+      </div>
+      <div class="deliverable-item">
+        <div class="d-icon">🗺️</div>
+        <div class="d-content">
+          <h3>Connection Map</h3>
+          <p>A curated directory of who to contact, where to show up, and how to establish
+          meaningful relationships in your local ecosystem.</p>
+        </div>
+      </div>
+      <div class="deliverable-item">
+        <div class="d-icon">📅</div>
+        <div class="d-content">
+          <h3>7-Day Action Calendar</h3>
+          <p>A day-by-day schedule with specific, prioritized tasks designed to generate
+          real progress within your first week of execution.</p>
+        </div>
+      </div>
+      <div class="deliverable-item">
+        <div class="d-icon">🏆</div>
+        <div class="d-content">
+          <h3>First Result Strategy</h3>
+          <p>A focused playbook for securing your first tangible win — whether that's a
+          paying customer, committed partner, or community milestone.</p>
+        </div>
+      </div>
     </div>
 
-    <div class="card">
-      <h3>Animal Rescue Support</h3>
-      <p>Connected with organizations and started receiving support.</p>
+    <div class="side-panel">
+      <div class="timeline-card">
+        <h3>Your Week One Timeline</h3>
+        <div class="timeline-steps">
+          <div class="t-step">
+            <div class="t-dot">1</div>
+            <div>
+              <div class="t-day">Day 1–2</div>
+              <div class="t-desc">Submit your idea. Receive your personalized execution plan and connection map.</div>
+            </div>
+          </div>
+          <div class="t-step">
+            <div class="t-dot">2</div>
+            <div>
+              <div class="t-day">Day 3–4</div>
+              <div class="t-desc">Reach out to your first connections. Begin establishing local relationships.</div>
+            </div>
+          </div>
+          <div class="t-step">
+            <div class="t-dot">3</div>
+            <div>
+              <div class="t-day">Day 5–6</div>
+              <div class="t-desc">Execute your first engagement. Attend, pitch, host, or partner — for real.</div>
+            </div>
+          </div>
+          <div class="t-step">
+            <div class="t-dot">4</div>
+            <div>
+              <div class="t-day">Day 7</div>
+              <div class="t-desc">Achieve your first result. Document, iterate, and accelerate from there.</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="card">
-      <h3>Mobile Food Security Project</h3>
-      <p>Secured resources and ran first service quickly.</p>
-    </div>
-
   </div>
 </div>
+</div>
+
+<hr class="full-divider">
+
+<!-- CASE STUDIES -->
+<div id="examples">
+<div class="section">
+  <div class="section-tag">Case Studies</div>
+  <h2>What this looks like<br>in <span class="grad-text">practice.</span></h2>
+  <p class="section-desc">
+    Real outcomes from people who submitted their ideas and took action
+    within the same week.
+  </p>
+
+  <div class="cases-grid">
+    <div class="case-card">
+      <div class="case-tag">Community Events</div>
+      <h3>Neighborhood Activation Series</h3>
+      <p>A first-time organizer wanted to build consistent community engagement in her
+      neighborhood. Within days of receiving her plan, she had a venue partner and
+      a confirmed launch event.</p>
+      <div class="case-result">Partnered with venue and launched within 6 days</div>
+    </div>
+    <div class="case-card">
+      <div class="case-tag">Nonprofit</div>
+      <h3>Animal Rescue Support Network</h3>
+      <p>A passionate advocate wanted to formalize local support for animal rescue.
+      The connection map surfaced three established organizations actively
+      seeking volunteer coordinators.</p>
+      <div class="case-result">Connected and onboarded within one week</div>
+    </div>
+    <div class="case-card">
+      <div class="case-tag">Food Security</div>
+      <h3>Mobile Food Access Initiative</h3>
+      <p>A community leader envisioned a mobile resource program but didn't know
+      where to begin. The plan identified surplus partnerships and volunteer
+      channels that launched the first service run quickly.</p>
+      <div class="case-result">First service run completed in 7 days</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="full-divider">
 
 <!-- FORM -->
-<div id="form" class="section">
-  <h2>Map My Idea</h2>
-  <p>Tell me what you're trying to build. I’ll map your exact next steps.</p>
+<div id="form">
+<div class="section form-section">
+  <div class="form-layout">
+    <div class="form-intro">
+      <div class="section-tag">Get Started</div>
+      <h2>Tell us what you're building.</h2>
+      <p>
+        Share your idea and we'll map your exact path forward — a clear execution
+        plan, a local connection map, and a day-by-day strategy to reach your
+        first real result.
+      </p>
+      <p style="margin-top: 16px;">
+        No fluff. No unnecessary setup. Just a direct path from where you
+        are to where you want to be.
+      </p>
+      <div class="spots-badge">Limited intake — a few spots available per week</div>
+    </div>
 
-  <div class="form-box">
-    <form action="mailto:your@email.com" method="POST" enctype="text/plain">
+    <div class="form-box">
+      <form action="mailto:your@email.com" method="POST" enctype="text/plain">
 
-      <label>What are you trying to start or grow?</label>
-      <textarea name="Idea" required></textarea>
+        <label>What are you trying to start or grow?</label>
+        <textarea name="Idea" rows="3" placeholder="Describe your idea in a few sentences..." required></textarea>
 
-      <label>What’s currently stopping you?</label>
-      <textarea name="Blockers" required></textarea>
+        <label>What's currently preventing you from moving forward?</label>
+        <textarea name="Blockers" rows="2" placeholder="Key obstacles or unknowns..." required></textarea>
 
-      <label>Have you taken any steps already?</label>
-      <textarea name="Progress"></textarea>
+        <label>What progress have you made so far? (optional)</label>
+        <textarea name="Progress" rows="2" placeholder="Any steps taken, research done, etc."></textarea>
 
-      <label>Where are you located?</label>
-      <input type="text" name="Location" required />
+        <label>Where are you located?</label>
+        <input type="text" name="Location" placeholder="City, State / Region" required />
 
-      <label>What would a real win look like in 30 days?</label>
-      <textarea name="Goal"></textarea>
+        <label>What does success look like in 30 days?</label>
+        <textarea name="Goal" rows="2" placeholder="Your definition of a meaningful win..."></textarea>
 
-      <label>Are you ready to act this week?</label>
-      <select name="Ready">
-        <option>Yes</option>
-        <option>No</option>
-      </select>
+        <label>Are you prepared to take action this week?</label>
+        <select name="Ready">
+          <option value="yes">Yes — I'm ready to move now</option>
+          <option value="no">Not quite — but I want to prepare</option>
+        </select>
 
-      <button type="submit">Build My Plan</button>
-    </form>
-
-    <p class="small">Limited spots — I only take a few requests per week.</p>
+        <button type="submit" class="submit-btn">Build My Plan →</button>
+      </form>
+    </div>
   </div>
 </div>
-
-<div class="section small" style="text-align:center;">
-  Built for people ready to stop thinking and start moving.
 </div>
 
-</div>
+<!-- FOOTER -->
+<footer>
+  <p>
+    <span class="footer-brand">LocalMotion</span> &nbsp;·&nbsp;
+    Built for people ready to stop thinking and start moving.
+  </p>
+</footer>
 
 </body>
 </html>
